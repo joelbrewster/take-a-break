@@ -1,17 +1,22 @@
-//
-//  Take_a_breakApp.swift
-//  Take a break
-//
-//  Created by Joel Brewster on 2/11/2024.
-//
-
 import SwiftUI
 
 @main
 struct Take_a_breakApp: App {
+    @NSApplicationDelegateAdaptor(TakeABreakDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+        }
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Take a break") {
+                    NSApplication.shared.orderFrontStandardAboutPanel(nil)
+                }
+            }
+        }
+        Settings {
+            PreferencesView()
         }
     }
 }
