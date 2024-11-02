@@ -7,87 +7,61 @@
 
 import SwiftUI
 
-class OverlayWindow: NSWindow {
+class MenuBarController {
+    private var statusItem: NSStatusItem
+    private var timerView: NSHostingView<MenuBarTimerView>?
+    
     init() {
-        super.init(
-            contentRect: NSScreen.main?.frame ?? .zero,
-            styleMask: [.borderless],
-            backing: .buffered,
-            defer: false
-        )
-        
-        self.level = .floating
-        self.backgroundColor = .clear
-        self.isOpaque = false
-        self.hasShadow = false
-        self.isMovableByWindowBackground = false
-        self.isReleasedWhenClosed = false
-    }
-}
-
-class OverlayWindowController: NSWindowController {
-    init() {
-        let window = OverlayWindow()
-        super.init(window: window)
+        statusItem = NSStatusBar.system.statusItem(withLength: 22)
+        setupTimerView()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func setupTimerView() {
+        timerView = NSHostingView(
+            rootView: MenuBarTimerView(progress: 1.0)
+        )
+        timerView?.frame = NSRect(x: 0, y: 0, width: 22, height: 22)
+        statusItem.button?.addSubview(timerView!)
+    }
+    
+    func updateProgress(_ timeRemaining: TimeInterval, total: TimeInterval) {
+        let progress = timeRemaining / total
+        timerView?.rootView = MenuBarTimerView(progress: progress)
     }
 }
 
-struct BreakOverlay: View {
-    let message: String
-    let onDismiss: () -> Void
+struct MenuBarTimerView: View {
+    @Environment(\.colorScheme) var colorScheme
+    let progress: Double
+    
+    var foregroundColor: Color {
+        colorScheme == .dark ? .white : .black
+    }
     
     var body: some View {
         ZStack {
-            Color.black.opacity(0.15)
-                .edgesIgnoringSafeArea(.all)
+            Circle()
+                .stroke(foregroundColor.opacity(0.3), lineWidth: 2)
             
-            VisualEffectView(material: .fullScreenUI, blendingMode: .withinWindow)
-                .edgesIgnoringSafeArea(.all)
-            
-            VStack(spacing: 20) {
-                Text(message)
-                    .font(.system(size: 36, weight: .light))
-                    .foregroundColor(.white)
-                
-                Button("Continue", action: onDismiss)
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-            }
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(foregroundColor, lineWidth: 2)
+                .rotationEffect(.degrees(-90))
         }
-    }
-}
-
-struct VisualEffectView: NSViewRepresentable {
-    let material: NSVisualEffectView.Material
-    let blendingMode: NSVisualEffectView.BlendingMode
-    
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let visualEffectView = NSVisualEffectView()
-        visualEffectView.material = material
-        visualEffectView.blendingMode = blendingMode
-        visualEffectView.state = .active
-        return visualEffectView
-    }
-    
-    func updateNSView(_ visualEffectView: NSVisualEffectView, context: Context) {
-        visualEffectView.material = material
-        visualEffectView.blendingMode = blendingMode
+        .frame(width: 18, height: 18)
+        .padding(2)
     }
 }
 
 struct ContentView: View {
+    // Basic timer states
     @State private var timeRemaining: TimeInterval = 30
-    @State private var isTimerActive = false
-    @State private var shortBreakCount = 0
-    @State private var maxShortBreaks = 3
-    @State private var showingBreakOverlay = false
-    @State private var breakMessage = ""
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    private let overlayWindowController = OverlayWindowController()
+    @State private var timerIsRunning = false
+    @State private var breakCount = 0
+    
+    private let totalTime: TimeInterval = 30
+    private let menuBarController = MenuBarController()
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         VStack(spacing: 30) {
@@ -95,21 +69,16 @@ struct ContentView: View {
                 .font(.system(size: 72, weight: .light, design: .rounded))
                 .monospacedDigit()
             
-            HStack(spacing: 8) {
-                ForEach(0..<maxShortBreaks, id: \.self) { index in
+            HStack(spacing: 16) {
+                ForEach(0..<breakCount, id: \.self) { _ in
                     Circle()
-                        .fill(index < shortBreakCount ? Color.blue : Color.gray.opacity(0.3))
+                        .fill(Color.blue)
                         .frame(width: 8, height: 8)
                 }
             }
             
-            Button(action: {
-                isTimerActive.toggle()
-                if !isTimerActive {
-                    timeRemaining = 30
-                }
-            }) {
-                Image(systemName: isTimerActive ? "pause.circle.fill" : "play.circle.fill")
+            Button(action: toggleTimer) {
+                Image(systemName: timerIsRunning ? "pause.circle.fill" : "play.circle.fill")
                     .resizable()
                     .frame(width: 44, height: 44)
                     .foregroundColor(.blue)
@@ -117,54 +86,47 @@ struct ContentView: View {
             .buttonStyle(PlainButtonStyle())
         }
         .frame(width: 300, height: 200)
-        .onChange(of: showingBreakOverlay) { newValue in
-            if newValue {
-                showOverlay()
-            } else {
-                hideOverlay()
-            }
-        }
         .onReceive(timer) { _ in
-            guard isTimerActive else { return }
-            
-            if timeRemaining > 0 {
-                timeRemaining -= 1
-            } else {
-                isTimerActive = false
-                if shortBreakCount < maxShortBreaks {
-                    breakMessage = "Take a 30-second break"
-                    shortBreakCount += 1
+            if timerIsRunning {
+                if timeRemaining > 1 {
+                    timeRemaining -= 1
+                    menuBarController.updateProgress(timeRemaining, total: totalTime)
                 } else {
-                    breakMessage = "Take a 1-minute break"
-                    shortBreakCount = 0
+                    timerComplete()
                 }
-                showingBreakOverlay = true
             }
         }
     }
     
-    private func showOverlay() {
-        let overlayView = BreakOverlay(message: breakMessage) {
-            showingBreakOverlay = false
-            timeRemaining = 30
-            isTimerActive = true
-        }
-        
-        overlayWindowController.window?.contentView = NSHostingView(rootView: overlayView)
-        overlayWindowController.window?.makeKeyAndOrderFront(nil)
-        
-        if let screen = NSScreen.main {
-            overlayWindowController.window?.setFrame(screen.frame, display: true)
+    private func toggleTimer() {
+        if timerIsRunning {
+            timerIsRunning = false
+        } else {
+            if timeRemaining == totalTime {
+                startTimer()
+            } else {
+                timerIsRunning = true
+                menuBarController.updateProgress(timeRemaining, total: totalTime)
+            }
         }
     }
     
-    private func hideOverlay() {
-        overlayWindowController.window?.orderOut(nil)
+    private func startTimer() {
+        timeRemaining = totalTime
+        timerIsRunning = true
+        menuBarController.updateProgress(timeRemaining, total: totalTime)
+    }
+    
+    private func timerComplete() {
+        timerIsRunning = false
+        timeRemaining = totalTime
+        breakCount += 1
+        menuBarController.updateProgress(totalTime, total: totalTime)
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {
-        let minutes = Int(timeInterval) / 60
-        let seconds = Int(timeInterval) % 60
+        let minutes = Int(ceil(timeInterval)) / 60
+        let seconds = Int(ceil(timeInterval)) % 60
         return String(format: "%02d:%02d", minutes, seconds)
     }
 }
