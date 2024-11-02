@@ -1,10 +1,4 @@
-//
-//  ContentView.swift
-//  Take a break
-//
-//  Created by Joel Brewster on 2/11/2024.
-//
-
+// ContentView.swift
 import SwiftUI
 
 struct ContentView: View {
@@ -15,13 +9,6 @@ struct ContentView: View {
     
     private let totalTime: TimeInterval = 30
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
-    init() {
-        _timeRemaining = State(initialValue: 30)
-        _timerIsRunning = State(initialValue: false)
-        _breakCount = State(initialValue: 0)
-        _showingPreferences = State(initialValue: false)
-    }
     
     var body: some View {
         ZStack {
@@ -50,9 +37,9 @@ struct ContentView: View {
         }
         .onReceive(timer) { _ in
             if timerIsRunning {
-                if timeRemaining > 1 {
+                if timeRemaining > 0 {
                     timeRemaining -= 1
-                    MenuBarController.shared.updateProgress(timeRemaining, total: totalTime)
+                    MenuBarController.shared.updateProgress(timeRemaining, total: totalTime) // Ensure you're calling this correctly
                 } else {
                     timerComplete()
                 }
@@ -75,8 +62,4 @@ struct ContentView: View {
         timeRemaining = totalTime
         breakCount += 1
     }
-}
-
-#Preview {
-    ContentView()
 }

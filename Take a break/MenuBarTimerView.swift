@@ -1,24 +1,21 @@
+// MenuBarTimerView.swift
 import SwiftUI
 
 struct MenuBarTimerView: View {
-    @Environment(\.colorScheme) var colorScheme
-    let progress: Double
-    
-    var foregroundColor: Color {
-        colorScheme == .dark ? .white : .black
-    }
-    
+    @ObservedObject var model: ProgressModel
+
     var body: some View {
-        ZStack {
-            Circle()
-                .stroke(foregroundColor.opacity(0.3), lineWidth: 2)
-            
-            Circle()
-                .trim(from: 0, to: progress)
-                .stroke(foregroundColor, lineWidth: 2)
-                .rotationEffect(.degrees(-90))
+            ZStack {
+                // Background circle (transparent)
+                Circle()
+                    .stroke(Color.white.opacity(0.3), lineWidth: 2)
+                
+                // Progress circle
+                Circle()
+                    .trim(from: 0, to: model.progress)
+                    .stroke(Color.white, lineWidth: 2)
+                    .rotationEffect(.degrees(-90))
+            }
+            .frame(width: 14, height: 14) // Slightly smaller than the 22x22 container
         }
-        .frame(width: 14, height: 14)
-        .padding(.horizontal, 8)
-    }
 }

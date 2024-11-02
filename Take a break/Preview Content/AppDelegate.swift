@@ -10,17 +10,18 @@ class TakeABreakDelegate: NSObject, NSApplicationDelegate {
     }
     
     private func setupMenuBar() {
+        // Initialize the status item
         statusItem = NSStatusBar.system.statusItem(withLength: 22)
-        
-        timerView = NSHostingView(
-            rootView: MenuBarTimerView(progress: 1.0)
-        )
+
+        // Use the shared instance of ProgressModel from MenuBarController
+        timerView = NSHostingView(rootView: MenuBarTimerView(model: MenuBarController.shared.model))
         timerView?.frame = NSRect(x: 0, y: 0, width: 22, height: 22)
         statusItem.button?.addSubview(timerView!)
     }
     
     func updateProgress(_ timeRemaining: TimeInterval, total: TimeInterval) {
-        let progress = timeRemaining / total
-        timerView?.rootView = MenuBarTimerView(progress: progress)
+        // Update the progress in the shared model
+        MenuBarController.shared.updateProgress(timeRemaining, total: total)
+        // Since MenuBarTimerView observes the model, it will automatically update
     }
 }
