@@ -48,8 +48,8 @@ struct MenuBarTimerView: View {
                 .stroke(foregroundColor, lineWidth: 2)
                 .rotationEffect(.degrees(-90))
         }
-        .frame(width: 18, height: 18)
-        .padding(2)
+        .frame(width: 14, height: 14)
+        .padding(10)
     }
 }
 

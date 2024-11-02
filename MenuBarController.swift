@@ -35,14 +35,14 @@ struct MenuBarTimerView: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(foregroundColor.opacity(0.3), lineWidth: 2)
+                .stroke(foregroundColor.opacity(0.3), lineWidth: 0.5)
             
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(foregroundColor, lineWidth: 2)
+                .stroke(foregroundColor, lineWidth: 0.5)
                 .rotationEffect(.degrees(-90))
         }
-        .frame(width: 18, height: 18)
-        .padding(2)
+        .frame(width: 14, height: 14)
+        .padding(.horizontal, 4)
     }
 } 
