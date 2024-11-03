@@ -1,16 +1,16 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    @AppStorage("menuBarIconSize") private var menuBarIconSize: Double = 14
+    @AppStorage("timerDuration") private var timerDuration: Double = 25  // Default 25 minutes
     
     var body: some View {
         Form {
-            Section("Menu Bar") {
-                VStack(alignment: .leading) {
-                    Text("Icon Size")
-                    Slider(value: $menuBarIconSize, in: 10...18, step: 1) {
-                        Text("Size")
-                    }
+            Section("Timer") {
+                HStack {
+                    Text("Duration (minutes)")
+                    TextField("", value: $timerDuration, format: .number)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 60)
                 }
             }
         }

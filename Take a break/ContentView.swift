@@ -3,12 +3,13 @@ import SwiftUI
 import UserNotifications
 
 struct ContentView: View {
-    @State private var timeRemaining: TimeInterval = 30
+    @AppStorage("timerDuration") private var timerDuration: Double = 25
+    @State private var timeRemaining: TimeInterval = 0
     @State private var timerIsRunning = false
     @State private var breakCount = 0
     @State private var showingPreferences = false
     
-    private let totalTime: TimeInterval = 30
+    private var totalTime: TimeInterval { timerDuration * 60 }
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     private func requestNotificationPermissions() {
@@ -59,7 +60,14 @@ struct ContentView: View {
             }
         }
         .onAppear {
+            timeRemaining = totalTime
             requestNotificationPermissions()
+        }
+        .onChange(of: timerDuration) { newValue in
+            timeRemaining = newValue * 60
+            if timerIsRunning {
+                timerIsRunning = false
+            }
         }
     }
     
