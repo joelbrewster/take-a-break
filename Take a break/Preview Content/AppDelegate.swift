@@ -9,6 +9,14 @@ class TakeABreakDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMenuBar()
         setupDockIcon()
+        
+        // Start observing the progress model
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(progressDidChange),
+            name: NSNotification.Name("ProgressDidChange"),
+            object: nil
+        )
     }
     
     private func setupMenuBar() {
@@ -27,11 +35,14 @@ class TakeABreakDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.dockTile.display()
     }
     
+    @objc private func progressDidChange() {
+        // Update dock icon whenever progress changes
+        dockIcon?.progress = MenuBarController.shared.model.progress
+        NSApplication.shared.dockTile.display()
+    }
+    
     func updateProgress(_ timeRemaining: TimeInterval, total: TimeInterval) {
         // Update the progress in the shared model
         MenuBarController.shared.updateProgress(timeRemaining, total: total)
-        // Update dock icon
-        dockIcon?.progress = MenuBarController.shared.model.progress ?? 1.0
-        NSApplication.shared.dockTile.display()
     }
 }

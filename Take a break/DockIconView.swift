@@ -11,7 +11,7 @@ class DockIconView: NSView {
         super.draw(dirtyRect)
         
         // Scale down the drawing area
-        let scale: CGFloat = 0.75 // Adjust this value to make icon smaller/larger
+        let scale: CGFloat = 0.75
         let scaledSize = min(bounds.width, bounds.height) * scale
         let originX = (bounds.width - scaledSize) / 2
         let originY = (bounds.height - scaledSize) / 2
@@ -32,7 +32,7 @@ class DockIconView: NSView {
         // Draw background circle in black with transparency
         let circleBackgroundPath = NSBezierPath(ovalIn: drawingBounds)
         NSColor.black.withAlphaComponent(0.3).setStroke()
-        circleBackgroundPath.lineWidth = 2
+        circleBackgroundPath.lineWidth = 8
         circleBackgroundPath.stroke()
         
         // Draw progress arc in solid black
@@ -44,7 +44,7 @@ class DockIconView: NSView {
         
         progressPath.appendArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         NSColor.black.setStroke()
-        progressPath.lineWidth = 2
+        progressPath.lineWidth = 8
         progressPath.stroke()
     }
 } 
