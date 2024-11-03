@@ -16,6 +16,7 @@ struct ContentView: View {
                 Text(timeString(from: timeRemaining))
                     .font(.system(size: 72, weight: .light, design: .rounded))
                     .monospacedDigit()
+                    .padding(.top, 60)
                 
                 HStack(spacing: 16) {
                     ForEach(0..<breakCount, id: \.self) { _ in
@@ -32,8 +33,11 @@ struct ContentView: View {
                         .foregroundColor(.blue)
                 }
                 .buttonStyle(PlainButtonStyle())
+                .padding(.bottom, 60)
+                
+                Spacer()
             }
-            .frame(width: 300, height: 200)
+            .frame(width: 300, height: 220)
         }
         .onReceive(timer) { _ in
             if timerIsRunning {
