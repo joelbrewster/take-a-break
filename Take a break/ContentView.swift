@@ -1,5 +1,6 @@
 // ContentView.swift
 import SwiftUI
+import UserNotifications
 
 struct ContentView: View {
     @State private var timeRemaining: TimeInterval = 30
@@ -9,6 +10,14 @@ struct ContentView: View {
     
     private let totalTime: TimeInterval = 30
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    private func requestNotificationPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { granted, error in
+            if let error = error {
+                print("Error requesting notification permissions: \(error)")
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -49,6 +58,9 @@ struct ContentView: View {
                 }
             }
         }
+        .onAppear {
+            requestNotificationPermissions()
+        }
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {
@@ -65,5 +77,29 @@ struct ContentView: View {
         timerIsRunning = false
         timeRemaining = totalTime
         breakCount += 1
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Break Time!"
+        content.body = "It's time to take a break."
+        content.sound = .default  // Uses the default system notification sound
+        
+        // For a custom sound, use:
+        // content.sound = UNNotificationSound(named: UNNotificationSoundName("your-sound-file.wav"))
+        
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: nil
+        )
+        
+        UNUserNotificationCenter.current().add(request)
+        
+        // Also play a sound immediately
+        NSSound.beep()  // Simple system beep
+        
+        // Or for a custom sound:
+        // if let sound = NSSound(named: "your-sound-file") {
+        //     sound.play()
+        // }
     }
 }

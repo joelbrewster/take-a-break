@@ -10,7 +10,7 @@ struct Take_a_breakApp: App {
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
-        .defaultSize(width: 300, height: 400)
+        .defaultSize(width: 300, height: 420)
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button("About Take a break") {
