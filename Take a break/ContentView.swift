@@ -26,7 +26,7 @@ struct ContentView: View {
                 Text(timeString(from: timeRemaining))
                     .font(.system(size: 72, weight: .light, design: .rounded))
                     .monospacedDigit()
-                    .padding(.top, 60)
+                    .padding(.top, 72)
                 
                 HStack(spacing: 16) {
                     ForEach(0..<breakCount, id: \.self) { _ in
@@ -39,15 +39,15 @@ struct ContentView: View {
                 Button(action: toggleTimer) {
                     Image(systemName: timerIsRunning ? "pause.circle.fill" : "play.circle.fill")
                         .resizable()
-                        .frame(width: 44, height: 44)
+                        .frame(width: 66, height: 66)
                         .foregroundColor(.accentColor)
                 }
                 .buttonStyle(PlainButtonStyle())
-                .padding(.bottom, 60)
+                .padding(.bottom, 72)
                 
                 Spacer()
             }
-            .frame(width: 300, height: 220)
+            .frame(width: 300, height: 260)
         }
         .onReceive(timer) { _ in
             if timerIsRunning {
