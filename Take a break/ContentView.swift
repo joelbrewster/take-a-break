@@ -69,6 +69,7 @@ struct ContentView: View {
                 timerIsRunning = false
             }
         }
+        .keyboardShortcut(.space, modifiers: [])
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {
