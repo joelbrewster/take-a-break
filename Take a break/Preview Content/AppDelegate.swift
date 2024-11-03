@@ -17,6 +17,10 @@ class TakeABreakDelegate: NSObject, NSApplicationDelegate {
             name: NSNotification.Name("ProgressDidChange"),
             object: nil
         )
+        
+        // Force dock icon update immediately
+        NSApplication.shared.dockTile.contentView = dockIcon
+        NSApplication.shared.dockTile.display()
     }
     
     private func setupMenuBar() {

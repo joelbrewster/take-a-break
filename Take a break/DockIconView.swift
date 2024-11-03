@@ -10,8 +10,8 @@ class DockIconView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        // Scale down the drawing area
-        let scale: CGFloat = 0.75
+        // Scale down the drawing area (increased from 0.75 to 0.85)
+        let scale: CGFloat = 0.85
         let scaledSize = min(bounds.width, bounds.height) * scale
         let originX = (bounds.width - scaledSize) / 2
         let originY = (bounds.height - scaledSize) / 2
