@@ -21,7 +21,7 @@ struct ContentView: View {
                 HStack(spacing: 16) {
                     ForEach(0..<breakCount, id: \.self) { _ in
                         Circle()
-                            .fill(Color.blue)
+                            .fill(Color.accentColor)
                             .frame(width: 8, height: 8)
                     }
                 }
@@ -30,7 +30,7 @@ struct ContentView: View {
                     Image(systemName: timerIsRunning ? "pause.circle.fill" : "play.circle.fill")
                         .resizable()
                         .frame(width: 44, height: 44)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.accentColor)
                 }
                 .buttonStyle(PlainButtonStyle())
                 .padding(.bottom, 60)
