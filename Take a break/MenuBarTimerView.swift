@@ -17,5 +17,12 @@ struct MenuBarTimerView: View {
                     .rotationEffect(.degrees(-90))
             }
             .frame(width: 14, height: 14) // Slightly smaller than the 22x22 container
+            .contentShape(Rectangle())  // Make entire area clickable
+            .onTapGesture {
+                if let window = NSApplication.shared.windows.first {
+                    window.makeKeyAndOrderFront(nil)
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                }
+            }
         }
 }

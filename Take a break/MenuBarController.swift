@@ -44,10 +44,25 @@ class MenuBarController {
     }
 
     private func setupTimerView() {
-        // Pass the model directly into MenuBarTimerView
         timerView = NSHostingView(rootView: MenuBarTimerView(model: model))
         timerView?.frame = NSRect(x: 0, y: 0, width: 22, height: 22)
-        statusItem?.button?.addSubview(timerView!)
+        
+        if let button = statusItem?.button {
+            // Add the timer view
+            button.addSubview(timerView!)
+            
+            // Set up click monitoring
+            let monitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown]) { event in
+                let clickLocation = NSStatusBar.system.statusItem(withLength: 22).button?.convert(event.locationInWindow, from: nil)
+                if clickLocation != nil {
+                    if let window = NSApplication.shared.windows.first {
+                        window.makeKeyAndOrderFront(nil)
+                        NSApplication.shared.activate(ignoringOtherApps: true)
+                    }
+                }
+                return event
+            }
+        }
     }
 
     func updateProgress(_ timeRemaining: TimeInterval, total: TimeInterval) {
