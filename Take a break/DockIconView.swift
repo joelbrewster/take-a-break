@@ -10,15 +10,14 @@ class DockIconView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        // Scale down the drawing area (increased from 0.75 to 0.85)
-        let scale: CGFloat = 0.85
-        let scaledSize = min(bounds.width, bounds.height) * scale
-        let originX = (bounds.width - scaledSize) / 2
-        let originY = (bounds.height - scaledSize) / 2
-        let scaledBounds = NSRect(x: originX, y: originY, width: scaledSize, height: scaledSize)
+        // Use a fixed size for the icon
+        let iconSize: CGFloat = min(bounds.width, bounds.height) * 0.8
+        let originX = (bounds.width - iconSize) / 2
+        let originY = (bounds.height - iconSize) / 2
+        let scaledBounds = NSRect(x: originX, y: originY, width: iconSize, height: iconSize)
         
         // Create rounded rect path for icon background
-        let cornerRadius: CGFloat = scaledSize * 0.2
+        let cornerRadius: CGFloat = iconSize * 0.2
         let backgroundPath = NSBezierPath(roundedRect: scaledBounds, xRadius: cornerRadius, yRadius: cornerRadius)
         
         // Fill background with white
@@ -26,25 +25,27 @@ class DockIconView: NSView {
         backgroundPath.fill()
         
         // Add padding for the progress circle
-        let padding: CGFloat = scaledSize * 0.2
+        let padding: CGFloat = iconSize * 0.2
         let drawingBounds = scaledBounds.insetBy(dx: padding, dy: padding)
         
         // Draw background circle in black with transparency
         let circleBackgroundPath = NSBezierPath(ovalIn: drawingBounds)
         NSColor.black.withAlphaComponent(0.3).setStroke()
-        circleBackgroundPath.lineWidth = 8
+        circleBackgroundPath.lineWidth = 6
+        circleBackgroundPath.lineCapStyle = .round
         circleBackgroundPath.stroke()
         
         // Draw progress arc in solid black
         let progressPath = NSBezierPath()
         let center = CGPoint(x: scaledBounds.midX, y: scaledBounds.midY)
-        let radius = (scaledSize / 2) - padding
-        let startAngle: CGFloat = -90
-        let endAngle = startAngle + (360 * progress)
+        let radius = (iconSize / 2) - padding
+        let startAngle: CGFloat = 90
+        let endAngle = startAngle - (360 * progress)
         
         progressPath.appendArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         NSColor.black.setStroke()
-        progressPath.lineWidth = 8
+        progressPath.lineWidth = 6
+        progressPath.lineCapStyle = .round
         progressPath.stroke()
     }
 } 
