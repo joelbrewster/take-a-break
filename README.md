@@ -13,10 +13,10 @@ A minimalist macOS timer application designed to help you maintain a healthy wor
 
 ## Screenshots
 
-![Main Window](screenshots/main.png)
-![Break Time](screenshots/1-break.png) 
-![Settings](screenshots/settings.png)
-![Dock Icon](screenshots/dock.png)
+![Main Window](screenshots/1.png)
+![Break Time](screenshots/2.png) 
+![Settings](screenshots/3.png)
+![Dock Icon](screenshots/4.png)
 
 ## Installation
 
