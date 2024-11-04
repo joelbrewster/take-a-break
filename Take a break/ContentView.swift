@@ -62,6 +62,16 @@ struct ContentView: View {
         .onAppear {
             timeRemaining = totalTime
             requestNotificationPermissions()
+            NotificationCenter.default.addObserver(
+                forName: Notification.Name("ResetTimer"),
+                object: nil,
+                queue: .main
+            ) { _ in
+                timeRemaining = totalTime
+                if timerIsRunning {
+                    timerIsRunning = false
+                }
+            }
         }
         .onChange(of: timerDuration) { newValue in
             timeRemaining = newValue * 60
@@ -70,6 +80,12 @@ struct ContentView: View {
             }
         }
         .keyboardShortcut(.space, modifiers: [])
+        .keyboardShortcut("r", modifiers: .command)
+        .onChange(of: timeRemaining) { _ in
+            if timeRemaining == totalTime {
+                timerIsRunning = false
+            }
+        }
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {

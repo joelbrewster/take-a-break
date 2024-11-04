@@ -24,6 +24,13 @@ struct Take_a_breakApp: App {
                     )
                 }
             }
+            
+            CommandGroup(after: .appInfo) {
+                Button("Reset Timer") {
+                    NotificationCenter.default.post(name: Notification.Name("ResetTimer"), object: nil)
+                }
+                .keyboardShortcut("r", modifiers: .command)
+            }
         }
         Settings {
             PreferencesView()
