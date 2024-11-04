@@ -1,7 +1,7 @@
 import AppKit
 
 class DockIconView: NSView {
-    var progress: Double = 1.0 {
+    var progress: Double = 0.0 {
         didSet {
             needsDisplay = true
         }
@@ -35,17 +35,19 @@ class DockIconView: NSView {
         circleBackgroundPath.lineCapStyle = .round
         circleBackgroundPath.stroke()
         
-        // Draw progress arc in solid black
-        let progressPath = NSBezierPath()
-        let center = CGPoint(x: scaledBounds.midX, y: scaledBounds.midY)
-        let radius = (iconSize / 2) - padding
-        let startAngle: CGFloat = 90
-        let endAngle = startAngle - (360 * progress)
-        
-        progressPath.appendArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-        NSColor.black.setStroke()
-        progressPath.lineWidth = 6
-        progressPath.lineCapStyle = .round
-        progressPath.stroke()
+        // Draw progress arc in solid black only if progress > 0
+        if progress > 0 {
+            let progressPath = NSBezierPath()
+            let center = CGPoint(x: scaledBounds.midX, y: scaledBounds.midY)
+            let radius = (iconSize / 2) - padding
+            let startAngle: CGFloat = 90
+            let endAngle = startAngle - (360 * progress)
+            
+            progressPath.appendArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+            NSColor.black.setStroke()
+            progressPath.lineWidth = 6
+            progressPath.lineCapStyle = .round
+            progressPath.stroke()
+        }
     }
 } 
