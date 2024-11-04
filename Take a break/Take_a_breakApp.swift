@@ -4,6 +4,10 @@ import SwiftUI
 struct Take_a_breakApp: App {
     @NSApplicationDelegateAdaptor(TakeABreakDelegate.self) var appDelegate
     
+    init() {
+        NSApplication.shared.orderedWindows.first?.level = .floating
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -14,7 +18,10 @@ struct Take_a_breakApp: App {
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button("About Take a break") {
-                    NSApplication.shared.orderFrontStandardAboutPanel(nil)
+                    let credits = NSAttributedString(string: "Joel Brewster")
+                    NSApplication.shared.orderFrontStandardAboutPanel(
+                        options: [NSApplication.AboutPanelOptionKey.credits: credits]
+                    )
                 }
             }
         }
