@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    @AppStorage("timerDuration") private var timerDuration: Double = 25  // Default 25 minutes
+    @AppStorage("timerDuration") private var timerDuration: Double = 25
     
     var body: some View {
         Form {
-            Section("Timer") {
+            Section {
                 HStack {
                     Text("Duration (minutes)")
                     TextField("", value: $timerDuration, format: .number)
@@ -14,7 +14,8 @@ struct PreferencesView: View {
                 }
             }
         }
-        .padding()
-        .frame(width: 350, height: 150)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 15)
+        .frame(width: 350, height: 80)
     }
 } 
