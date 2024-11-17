@@ -6,9 +6,10 @@ A minimalist macOS timer application designed to help you maintain a healthy wor
 
 - 🕒 Customizable timer duration (default: 25 minutes)
 - 🔔 System notifications when it's time for a break
+- 🔊 Audio alerts when timer completes
 - 📊 Visual progress tracking in both menu bar and dock icon
 - ⌨️ Keyboard shortcuts for quick control - cmd+r to reset, space to start/pause, cmd+, to open preferences
-- 🎯 Break counter to track your daily breaks
+- 🎯 Break counter with hearts for every 5 breaks completed
 - 💻 Floating window with a simple UI
 
 ## Screenshots
@@ -36,6 +37,8 @@ A minimalist macOS timer application designed to help you maintain a healthy wor
 The app displays a circular progress indicator in your menu bar:
 - Circle: Time remaining
 - Click the indicator to show the main window
+- Small dots show completed breaks
+- Hearts appear for every 5 breaks completed
 
 ### Preferences
 You can customize:
@@ -43,9 +46,9 @@ You can customize:
 
 ### Notifications
 The app will notify you when it's time to take a break using:
-- System notifications
-- Audio alert
-- Visual indicators
+- System notifications (requires permission)
+- Audio alert sound
+- Visual indicators in menu bar and dock
 
 ## Technical Details
 

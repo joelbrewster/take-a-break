@@ -29,7 +29,13 @@ struct ContentView: View {
                     .padding(.top, 72)
                 
                 HStack(spacing: 16) {
-                    ForEach(0..<breakCount, id: \.self) { _ in
+                    ForEach(0..<(breakCount / 5), id: \.self) { _ in
+                        Image(systemName: "heart.fill")
+                            .foregroundColor(.red)
+                            .frame(width: 12, height: 12)
+                    }
+                    
+                    ForEach(0..<(breakCount % 5), id: \.self) { _ in
                         Circle()
                             .fill(Color.accentColor)
                             .frame(width: 8, height: 8)
