@@ -21,10 +21,7 @@ A minimalist macOS timer application designed to help you maintain a healthy wor
 
 ## Installation
 
-1. Download the latest release from the releases page
-2. Move "Take a Break.app" to your Applications folder
-3. Launch the application
-4. Grant notification permissions when prompted
+1. Release coming to the Appstore soon.
 
 ## Usage
 
@@ -68,17 +65,3 @@ The code in this repo is not production ready. It's a simple app I built to try 
 ## Credits
 
 Created by Joel Brewster
-
-## License
-
-Creative Commons Attribution-NonCommercial (CC BY-NC)
-
-This work is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
-
-You are free to:
-- Share — copy and redistribute the material in any medium or format
-- Adapt — remix, transform, and build upon the material
-
-Under the following terms:
-- Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made
-- NonCommercial — You may not use the material for commercial purposes
